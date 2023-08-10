@@ -67,3 +67,7 @@
 
   ;; Load the theme of your choice.
   (load-theme 'modus-vivendi-tinted :no-confirm))
+
+(use-package nov
+  :config
+  (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode)))
