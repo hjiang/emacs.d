@@ -11,20 +11,59 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
+(setq-default line-spacing 0.2
+	      display-line-numbers-type 'relative
+ 	      indicate-empty-lines t)
+
 (setq straight-use-package-by-default t)
 (straight-use-package 'use-package)
 (menu-bar-mode -1)
-(set-default 'indicate-empty-lines t)
-(setq display-line-numbers-type 'relative)
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+(global-display-line-numbers-mode 1)
+(recentf-mode 1)
+(setq history-length 100)
+(savehist-mode 1)
+(save-place-mode 1)
+(global-auto-revert-mode 1)
+;; Only affect clean buffers
+(setq global-auto-revert-non-file-buffers t)
+
+;; See https://www.emacswiki.org/emacs/SetFonts#h5o-16
+(when (eq system-type 'darwin)
+  ;; default Latin font
+  (set-face-attribute 'default nil :family "JetBrains Mono")
+  (set-face-attribute 'default nil :weight 'thin)
+  (set-face-attribute 'default nil :height 140)
+
+  ;; use specific font for Korean charset.
+  ;; if you want to use different font size for specific charset,
+  ;; add :size POINT-SIZE in the font-spec.
+  ;;(set-fontset-font t 'hangul (font-spec :name "NanumGothicCoding"))
+
+  ;; you may want to add different for other charset in this way.
+  )
+
+(defun indent-buffer ()
+  (interactive)
+  (save-excursion
+    (indent-region (point-min) (point-max) nil)))
 
 (use-package exec-path-from-shell
   :config
   (when (memq window-system '(mac ns x))
     (exec-path-from-shell-initialize))
   (when (daemonp)
-  (exec-path-from-shell-initialize)))
+    (exec-path-from-shell-initialize)))
 
-(use-package spacegray-theme
+(use-package modus-themes
   :config
-  (load-theme 'spacegray t)
-  (global-hl-line-mode 1))
+  (setq modus-themes-common-palette-overrides
+	'(
+	  ;; Make the mode line borderless
+	  (border-mode-line-active unspecified)
+          (border-mode-line-inactive unspecified)
+	  ,@modus-themes-preset-overrides-warmer))
+
+  ;; Load the theme of your choice.
+  (load-theme 'modus-vivendi-tinted :no-confirm))
