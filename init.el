@@ -35,7 +35,7 @@
 (when (eq system-type 'darwin)
   ;; default Latin font
   (set-face-attribute 'default nil :family "JetBrains Mono")
-  (set-face-attribute 'default nil :weight 'thin)
+  (set-face-attribute 'default nil :weight 'light)
   (set-face-attribute 'default nil :height 140)
 
   ;; use specific font for Korean charset.
