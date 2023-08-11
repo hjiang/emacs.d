@@ -3,7 +3,10 @@ auto-save-list/
 eln-cache/
 elpa/
 history
+local/
+nov-places
 places
 recentf
 straight/
 transient/
+tree-sitter/
