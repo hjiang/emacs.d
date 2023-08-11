@@ -15,7 +15,9 @@
 	            display-line-numbers-type 'relative
  	            indicate-empty-lines t
 	            indent-tabs-mode nil
-	            tab-width 2)
+	            tab-width 2
+              require-final-newline t
+              file-preserve-symlinks-on-save t)
 
 (setq straight-use-package-by-default t)
 (straight-use-package 'use-package)
