@@ -89,6 +89,9 @@
 (add-to-list 'major-mode-remap-alist
              '(c-or-c++-mode . c-or-c++-ts-mode))
 
+(setq org-adapt-indentation t
+      org-hide-leading-stars t)
+
 
 (use-package modus-themes
   :config
