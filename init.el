@@ -12,8 +12,10 @@
   (load bootstrap-file nil 'nomessage))
 
 (setq-default line-spacing 0.2
-	      display-line-numbers-type 'relative
- 	      indicate-empty-lines t)
+	            display-line-numbers-type 'relative
+ 	            indicate-empty-lines t
+	            indent-tabs-mode nil
+	            tab-width 2)
 
 (setq straight-use-package-by-default t)
 (straight-use-package 'use-package)
