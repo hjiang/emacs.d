@@ -77,6 +77,18 @@
 
 (load-env-file "~/.emacs.d/local/env.el")
 
+(setq treesit-language-source-alist
+      '((cpp "https://github.com/tree-sitter/tree-sitter-cpp")
+	      (c "https://github.com/tree-sitter/tree-sitter-c")))
+
+(setq treesit-load-name-override-list
+      '((c++ "libtree-sitter-cpp")))
+
+(add-to-list 'major-mode-remap-alist '(c-mode . c-ts-mode))
+(add-to-list 'major-mode-remap-alist '(c++-mode . c++-ts-mode))
+(add-to-list 'major-mode-remap-alist
+             '(c-or-c++-mode . c-or-c++-ts-mode))
+
 
 (use-package modus-themes
   :config
