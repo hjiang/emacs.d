@@ -81,11 +81,10 @@
 (use-package modus-themes
   :config
   (setq modus-themes-common-palette-overrides
-	'(
-	  ;; Make the mode line borderless
-	  (border-mode-line-active unspecified)
+	      ;; Make the mode line borderless
+	      '((border-mode-line-active unspecified)
           (border-mode-line-inactive unspecified)
-	  ,@modus-themes-preset-overrides-warmer))
+	        ,@modus-themes-preset-overrides-warmer))
 
   ;; Load the theme of your choice.
   (load-theme 'modus-vivendi-tinted :no-confirm))
