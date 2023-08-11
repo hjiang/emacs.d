@@ -92,6 +92,7 @@
 (setq org-adapt-indentation t
       org-hide-leading-stars t)
 
+(fido-mode)
 
 (use-package modus-themes
   :config
