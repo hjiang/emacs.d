@@ -115,3 +115,5 @@
   :hook (prog-mode . copilot-mode)
   :config
   (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion))
+
+(use-package magit)
