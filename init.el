@@ -104,6 +104,7 @@
 	      ;; Make the mode line borderless
 	      '((border-mode-line-active unspecified)
           (border-mode-line-inactive unspecified)
+          (fringe unspecified)
 	        ,@modus-themes-preset-overrides-warmer))
   (load-theme 'modus-vivendi-tinted :no-confirm))
 
