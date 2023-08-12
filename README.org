@@ -1,0 +1,8 @@
+* macOS Notes
+** Natural title bar
+   See https://github.com/railwaycat/homebrew-emacsmacport/wiki/Natural-Title-Bar.
+
+   When using the Emacs Mac port, use the following to enable Natural title bar:
+   #+BEGIN_SRC shell
+     defaults write org.gnu.Emacs TransparentTitleBar DARK
+   #+END_SRC
