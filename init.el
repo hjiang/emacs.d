@@ -105,12 +105,16 @@
 	      '((border-mode-line-active unspecified)
           (border-mode-line-inactive unspecified)
 	        ,@modus-themes-preset-overrides-warmer))
-
-  ;; Load the theme of your choice.
   (load-theme 'modus-vivendi-tinted :no-confirm))
 
+(use-package helm
+  :bind (("M-i" . helm-imenu)
+         ("M-s o" . helm-occur)
+         (:map isearch-mode-map
+               ("M-s o" . helm-occur-from-isearch))))
+
 (use-package nov
-  :config
+  :confiog
   (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode)))
 
 (use-package copilot
