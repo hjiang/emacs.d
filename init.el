@@ -11,44 +11,8 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
-(setq-default line-spacing 0.2
-	            display-line-numbers-type 'relative
- 	            indicate-empty-lines t
-	            indent-tabs-mode nil
-	            tab-width 2
-              require-final-newline t
-              file-preserve-symlinks-on-save t)
-
 (setq straight-use-package-by-default t)
 (straight-use-package 'use-package)
-(menu-bar-mode -1)
-(tool-bar-mode -1)
-(scroll-bar-mode -1)
-(global-display-line-numbers-mode 1)
-(recentf-mode 1)
-(setq history-length 100)
-(savehist-mode 1)
-(save-place-mode 1)
-(global-auto-revert-mode 1)
-;; Only affect clean buffers
-(setq global-auto-revert-non-file-buffers t)
-(setq inhibit-startup-message t
-      initial-scratch-message nil)
-
-;; See https://www.emacswiki.org/emacs/SetFonts#h5o-16
-(when (eq system-type 'darwin)
-  ;; default Latin font
-  (set-face-attribute 'default nil :family "JetBrains Mono")
-  (set-face-attribute 'default nil :weight 'light)
-  (set-face-attribute 'default nil :height 140)
-
-  ;; use specific font for Korean charset.
-  ;; if you want to use different font size for specific charset,
-  ;; add :size POINT-SIZE in the font-spec.
-  ;;(set-fontset-font t 'hangul (font-spec :name "NanumGothicCoding"))
-
-  ;; you may want to add different for other charset in this way.
-  )
 
 (defun indent-buffer ()
   (interactive)
@@ -81,22 +45,63 @@
 
 (load-env-file "~/.emacs.d/local/env.el")
 
-(setq treesit-language-source-alist
-      '((cpp "https://github.com/tree-sitter/tree-sitter-cpp")
-	      (c "https://github.com/tree-sitter/tree-sitter-c")))
+(defun cleanup-clutter ()
+  (menu-bar-mode -1)
+  (tool-bar-mode -1)
+  (scroll-bar-mode -1)
+  (setq inhibit-startup-message t
+        initial-scratch-message nil))
 
-(setq treesit-load-name-override-list
-      '((c++ "libtree-sitter-cpp")))
+(defun setup-fonts ()
+  ;; See https://www.emacswiki.org/emacs/SetFonts#h5o-16
+  (when (eq system-type 'darwin)
+    (set-face-attribute 'default nil :family "JetBrains Mono")
+    (set-face-attribute 'default nil :weight 'light)
+    (set-face-attribute 'default nil :height 140))
+  )
 
-(add-to-list 'major-mode-remap-alist '(c-mode . c-ts-mode))
-(add-to-list 'major-mode-remap-alist '(c++-mode . c++-ts-mode))
-(add-to-list 'major-mode-remap-alist
-             '(c-or-c++-mode . c-or-c++-ts-mode))
+(defun setup-tree-sitter ()
+  (setq treesit-language-source-alist
+        '((cpp "https://github.com/tree-sitter/tree-sitter-cpp")
+	        (c "https://github.com/tree-sitter/tree-sitter-c")))
+  (setq treesit-load-name-override-list
+        '((c++ "libtree-sitter-cpp")))
+  (add-to-list 'major-mode-remap-alist '(c-mode . c-ts-mode))
+  (add-to-list 'major-mode-remap-alist '(c++-mode . c++-ts-mode))
+  (add-to-list 'major-mode-remap-alist
+               '(c-or-c++-mode . c-or-c++-ts-mode)))
 
-(setq org-adapt-indentation t
-      org-hide-leading-stars t)
+(use-package emacs
+  :ensure nil
+  :straight nil
+  :config
+  (cleanup-clutter)
+  (setq-default line-spacing 0.2
+	              display-line-numbers-type 'relative
+ 	              indicate-empty-lines t
+	              indent-tabs-mode nil
+	              tab-width 2
+                require-final-newline t
+                file-preserve-symlinks-on-save t)
+  (global-display-line-numbers-mode 1)
+  (recentf-mode 1)
+  (setq history-length 100)
+  (savehist-mode 1)
+  (save-place-mode 1)
+  ;; Only affect clean buffers
+  (global-auto-revert-mode 1)
+  (setq global-auto-revert-non-file-buffers t)
 
-(fido-mode)
+  (setup-fonts)
+  (setup-tree-sitter)
+  (fido-mode))
+
+(use-package org
+  :ensure nil
+  :straight nil
+  :config
+  (setq org-adapt-indentation 'headline-data
+        org-hide-leading-stars t))
 
 (use-package modus-themes
   :config
