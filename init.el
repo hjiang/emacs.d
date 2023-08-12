@@ -32,6 +32,8 @@
 (global-auto-revert-mode 1)
 ;; Only affect clean buffers
 (setq global-auto-revert-non-file-buffers t)
+(setq inhibit-startup-message t
+      initial-scratch-message nil)
 
 ;; See https://www.emacswiki.org/emacs/SetFonts#h5o-16
 (when (eq system-type 'darwin)
