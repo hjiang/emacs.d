@@ -128,11 +128,18 @@
 	        ,@modus-themes-preset-overrides-warmer))
   (load-theme 'modus-vivendi-tinted :no-confirm))
 
-(use-package helm
-  :bind (("M-i" . helm-imenu)
-         ("M-s o" . helm-occur)
-         (:map isearch-mode-map
-               ("M-s o" . helm-occur-from-isearch))))
+(use-package vertico
+  :config
+  (vertico-mode))
+
+(use-package orderless
+  :config
+  ;; Configure a custom style dispatcher (see the Consult wiki)
+  ;; (setq orderless-style-dispatchers '(+orderless-consult-dispatch orderless-affix-dispatch)
+  ;;       orderless-component-separator #'orderless-escapable-split-on-space)
+  (setq completion-styles '(orderless basic)
+        completion-category-defaults nil
+        completion-category-overrides '((file (styles partial-completion)))))
 
 (use-package nov
   :config
