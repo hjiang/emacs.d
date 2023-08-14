@@ -104,6 +104,9 @@
 (use-package org
   :ensure nil
   :straight nil
+  :init
+  (setq org-directory "~/org")
+  (setq org-agenda-files '("~/org/agenda"))
   :config
   (setq org-adapt-indentation 'headline-data
         org-hide-leading-stars t))
