@@ -98,6 +98,7 @@
   (save-place-mode 1)
   ;; Only affect clean buffers
   (global-auto-revert-mode 1)
+  (electric-pair-mode)
   (setq global-auto-revert-non-file-buffers t)
   (setup-fonts)
   (setup-tree-sitter)
