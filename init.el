@@ -43,7 +43,9 @@
               (set-time-zone-rule newtz))))
         env))))
 
-(load-env-file "~/.emacs.d/local/env.el")
+(let ((env-file "~/.emacs.d/local/env.el"))
+  (when (file-readable-p env-file)
+    (load-env-file env-file)))
 
 (defun cleanup-clutter ()
   (menu-bar-mode -1)
