@@ -92,7 +92,8 @@
 	              indent-tabs-mode nil
 	              tab-width 2
                 require-final-newline t
-                file-preserve-symlinks-on-save t)
+                file-preserve-symlinks-on-save t
+                fill-column 80)
   (global-display-line-numbers-mode 1)
   (recentf-mode 1)
   (setq history-length 100)
