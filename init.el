@@ -132,7 +132,7 @@
                ("M-s o" . helm-occur-from-isearch))))
 
 (use-package nov
-  :confiog
+  :config
   (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode)))
 
 (use-package copilot
