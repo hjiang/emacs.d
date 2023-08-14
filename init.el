@@ -96,7 +96,7 @@
                 fill-column 80)
   (global-display-line-numbers-mode 1)
   (recentf-mode 1)
-  (setq history-length 100)
+  (setq history-length 1000)
   (savehist-mode 1)
   (save-place-mode 1)
   ;; Only affect clean buffers
