@@ -145,3 +145,6 @@
   (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion))
 
 (use-package magit)
+
+(use-package ansi-color
+  :hook (compilation-filter . ansi-color-compilation-filter)) 
