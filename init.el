@@ -71,6 +71,11 @@
   (add-to-list 'major-mode-remap-alist
                '(c-or-c++-mode . c-or-c++-ts-mode)))
 
+(defun setup-custom-file ()
+  (setq custom-file "~/.emacs.d/local/custom.el")
+  (when (file-readable-p custom-file)
+    (load custom-file)))
+
 (use-package emacs
   :ensure nil
   :straight nil
@@ -91,10 +96,10 @@
   ;; Only affect clean buffers
   (global-auto-revert-mode 1)
   (setq global-auto-revert-non-file-buffers t)
-
   (setup-fonts)
   (setup-tree-sitter)
-  (fido-mode))
+  (fido-mode)
+  (setup-custom-file))
 
 (use-package org
   :ensure nil
