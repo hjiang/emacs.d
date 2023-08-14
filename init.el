@@ -147,4 +147,6 @@
 (use-package magit)
 
 (use-package ansi-color
-  :hook (compilation-filter . ansi-color-compilation-filter)) 
+  :hook (compilation-filter . ansi-color-compilation-filter))
+
+(use-package vterm)
