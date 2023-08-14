@@ -68,7 +68,7 @@
 	        (c "https://github.com/tree-sitter/tree-sitter-c")))
   (dolist (lang treesit-language-source-alist)
     (unless (treesit-language-available-p (car lang))
-      (treesit-install-language (car lang))))
+      (treesit-install-language-grammar (car lang))))
   (setq treesit-load-name-override-list
         '((c++ "libtree-sitter-cpp")))
   (add-to-list 'major-mode-remap-alist '(c-mode . c-ts-mode))
