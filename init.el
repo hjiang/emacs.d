@@ -182,3 +182,5 @@
   :ensure nil
   :straight nil
   :hook (c++-ts-mode . eglot-ensure))
+
+(use-package keychain-environment)
