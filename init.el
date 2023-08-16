@@ -166,8 +166,10 @@
   :straight (:host github :repo "zerolfx/copilot.el" :files ("dist" "*.el"))
   :ensure t
   :hook (prog-mode . copilot-mode)
-  :config
-  (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion))
+  :bind (:map copilot-completion-map
+         ("C-f" . copilot-accept-completion-by-line)
+         ("C-e" . copilot-accept-completion)
+         ("C-g" . copilot-clear-overlay)))
 
 (use-package magit)
 
