@@ -100,6 +100,7 @@
                 file-preserve-symlinks-on-save t
                 fill-column 80)
   (global-display-line-numbers-mode 1)
+  (column-number-mode 1)
   (recentf-mode 1)
   (setq history-length 1000)
   (savehist-mode 1)
