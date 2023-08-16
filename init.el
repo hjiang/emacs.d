@@ -81,6 +81,11 @@
   (when (file-readable-p custom-file)
     (load custom-file)))
 
+(defun maybe-setup-macos ()
+  (when (eq system-type 'darwin)
+    (setq mac-option-modifier 'super
+          mac-command-modifier 'meta)))
+
 (use-package emacs
   :ensure nil
   :straight nil
@@ -106,7 +111,8 @@
   (setup-fonts)
   (setup-tree-sitter)
   (fido-mode)
-  (setup-custom-file))
+  (setup-custom-file)
+  (maybe-setup-macos))
 
 (use-package org
   :ensure nil
