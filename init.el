@@ -132,8 +132,8 @@
 	      '((border-mode-line-active unspecified)
           (border-mode-line-inactive unspecified)
           (fringe unspecified)
-	        ,@modus-themes-preset-overrides-warmer))
-  (load-theme 'modus-vivendi-tinted :no-confirm))
+	        ,@modus-themes-preset-overrides-faint))
+  (load-theme 'modus-vivendi :no-confirm))
 
 (use-package vertico
   :init
