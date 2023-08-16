@@ -177,3 +177,8 @@
   :hook (compilation-filter . ansi-color-compilation-filter))
 
 (use-package vterm)
+
+(use-package eglot
+  :ensure nil
+  :straight nil
+  :hook (c++-ts-mode . eglot-ensure))
