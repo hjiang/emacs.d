@@ -1,12 +1,16 @@
 *~
+.local/
 auto-save-list/
 eln-cache/
 elpa/
 history
+image-dired/
 local/
 nov-places
 places
+projects
 recentf
 straight/
 transient/
 tree-sitter/
+url/
