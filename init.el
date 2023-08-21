@@ -137,14 +137,13 @@
   :init
   (vertico-mode))
 
-(use-package orderless
+(use-package prescient
   :init
-  ;; Configure a custom style dispatcher (see the Consult wiki)
-  ;; (setq orderless-style-dispatchers '(+orderless-consult-dispatch orderless-affix-dispatch)
-  ;;       orderless-component-separator #'orderless-escapable-split-on-space)
-  (setq completion-styles '(orderless basic)
-        completion-category-defaults nil
-        completion-category-overrides '((file (styles partial-completion)))))
+  (add-to-list 'completion-styles 'prescient))
+
+(use-package vertico-prescient
+  :init
+  (vertico-prescient-mode))
 
 (use-package consult
   :bind (("C-x b" . consult-buffer)
