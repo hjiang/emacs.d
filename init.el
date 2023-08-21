@@ -192,3 +192,5 @@
 (use-package keychain-environment)
 
 (use-package yaml-mode)
+
+(use-package bazel)
