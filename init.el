@@ -92,14 +92,12 @@
   :config
   (cleanup-clutter)
   (setq-default line-spacing 0.2
-	              display-line-numbers-type 'relative
  	              indicate-empty-lines t
 	              indent-tabs-mode nil
 	              tab-width 2
                 require-final-newline t
                 file-preserve-symlinks-on-save t
                 fill-column 80)
-  (global-display-line-numbers-mode 1)
   (column-number-mode 1)
   (recentf-mode 1)
   (setq history-length 1000)
@@ -181,6 +179,10 @@
 (use-package eglot
   :ensure nil
   :straight nil
-  :hook (c++-ts-mode . eglot-ensure))
+  :hook (c++-ts-mode . (lambda ()
+                         (eglot-ensure)
+                         (setq-local electric-indent-chars
+                                     (remq ?\n electric-indent-chars))
+                         (add-hook 'before-save-hook #'eglot-format-buffer nil t))))
 
 (use-package keychain-environment)
