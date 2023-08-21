@@ -190,3 +190,5 @@
   (setq-default flycheck-clang-language-standard "c++20"))
 
 (use-package keychain-environment)
+
+(use-package yaml-mode)
