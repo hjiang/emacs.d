@@ -184,4 +184,9 @@
                                      (remq ?\n electric-indent-chars))
                          (add-hook 'before-save-hook #'eglot-format-buffer nil t))))
 
+(use-package flycheck
+  :init (global-flycheck-mode)
+  :config
+  (setq-default flycheck-clang-language-standard "c++20"))
+
 (use-package keychain-environment)
