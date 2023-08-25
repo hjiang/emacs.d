@@ -43,7 +43,7 @@
               (set-time-zone-rule newtz))))
         env))))
 
-(let ((env-file "~/.emacs.d/local/env.el"))
+(let ((env-file "~/.emacs.d/.local/env.el"))
   (when (file-readable-p env-file)
     (load-env-file env-file)))
 
@@ -77,7 +77,7 @@
                '(c-or-c++-mode . c-or-c++-ts-mode)))
 
 (defun setup-custom-file ()
-  (setq custom-file "~/.emacs.d/local/custom.el")
+  (setq custom-file "~/.emacs.d/.local/custom.el")
   (when (file-readable-p custom-file)
     (load custom-file)))
 

@@ -8,5 +8,5 @@
      ";; This file was automatically generated and will be overwritten.\n")
     (insert (pp-to-string process-environment))))
 
-(gen-env-file "~/.emacs.d/local/env.el")
+(gen-env-file "~/.emacs.d/.local/env.el")
 	      
