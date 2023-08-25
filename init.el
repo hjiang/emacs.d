@@ -98,6 +98,8 @@
                 require-final-newline t
                 file-preserve-symlinks-on-save t
                 fill-column 80)
+  (setq global-auto-revert-non-file-buffers t
+        visible-bell t)
   (column-number-mode 1)
   (recentf-mode 1)
   (setq history-length 1000)
@@ -106,7 +108,6 @@
   ;; Only affect clean buffers
   (global-auto-revert-mode 1)
   (electric-pair-mode)
-  (setq global-auto-revert-non-file-buffers t)
   (setup-fonts)
   (setup-tree-sitter)
   (fido-mode)
