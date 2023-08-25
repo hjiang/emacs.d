@@ -202,3 +202,5 @@
   :init (setq markdown-command "pandoc")
   :bind (:map markdown-mode-map
               ("C-c C-e" . markdown-do)))
+
+(use-package clojure-mode)
