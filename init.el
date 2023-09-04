@@ -50,7 +50,8 @@
 (defun cleanup-clutter ()
   (menu-bar-mode -1)
   (tool-bar-mode -1)
-  (scroll-bar-mode -1)
+  (if (display-graphic-p)
+      (scroll-bar-mode -1))
   (setq inhibit-startup-message t
         initial-scratch-message nil))
 
@@ -192,6 +193,10 @@
 
 (use-package keychain-environment)
 
+(use-package direnv
+ :config
+ (direnv-mode))
+
 (use-package yaml-mode)
 
 (use-package bazel)
@@ -204,3 +209,31 @@
               ("C-c C-e" . markdown-do)))
 
 (use-package clojure-mode)
+
+(use-package pyim
+  :config
+  (use-package popup)
+  (use-package pyim-basedict
+    :config (pyim-basedict-enable))
+  (setq default-input-method "pyim")
+  (setq pyim-default-scheme 'quanpin)
+
+  ;; (setq-default pyim-english-input-switch-functions
+  ;;               '(pyim-probe-dynamic-english
+  ;;                 pyim-probe-isearch-mode
+  ;;                 pyim-probe-program-mode
+  ;;                 pyim-probe-org-structure-template))
+
+  (setq-default pyim-punctuation-half-width-functions
+                '(pyim-probe-punctuation-line-beginning
+                  pyim-probe-punctuation-after-punctuation))
+
+  (pyim-isearch-mode 1)
+  (setq pyim-page-tooltip 'popup)
+  (setq pyim-page-length 5)
+  (add-hook 'emacs-startup-hook
+            #'(lambda () (pyim-restart-1 t)))
+  :bind
+  ;; (("M-j" . pyim-convert-code-at-point) ;与 pyim-probe-dynamic-english 配合
+  ;;  ("C-;" . pyim-delete-word-from-personal-buffer))
+  )
