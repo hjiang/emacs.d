@@ -100,7 +100,8 @@
                 file-preserve-symlinks-on-save t
                 fill-column 80)
   (setq global-auto-revert-non-file-buffers t
-        visible-bell t)
+        visible-bell t
+        make-backupfiles nil)
   (column-number-mode 1)
   (recentf-mode 1)
   (setq history-length 1000)
