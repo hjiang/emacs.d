@@ -208,4 +208,6 @@
   :bind (:map markdown-mode-map
               ("C-c C-e" . markdown-do)))
 
+(use-package cmake-mode)
+
 (use-package clojure-mode)
