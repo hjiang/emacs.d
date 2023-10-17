@@ -1,3 +1,5 @@
+;; -*- mode: elisp; lexical-binding: t; -*-
+
 (defvar bootstrap-version)
 (let ((bootstrap-file
        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
@@ -24,7 +26,7 @@
   (if (null (file-exists-p file))
       (signal 'file-error
               (list "No envvar file exists." file
-                    "Run `emacs --script ~/.emacs.d/scripts/gen-env-file.el`."))
+                    "See https://github.com/hjiang/envel."))
     (with-temp-buffer
       (insert-file-contents file)
       (when-let (env (read (current-buffer)))
@@ -45,7 +47,11 @@
 
 (let ((env-file "~/.emacs.d/.local/env.el"))
   (when (file-readable-p env-file)
-    (load-env-file env-file)))
+    (defun reload-env ()
+      "Reload environment variables"
+      (interactive)
+      (load-env-file env-file))
+    (reload-env)))
 
 (defun cleanup-clutter ()
   (menu-bar-mode -1)
@@ -195,18 +201,18 @@
   :config
   (setq-default flycheck-clang-language-standard "c++20"))
 
-(use-package keychain-environment)
-
 (use-package direnv
  :config
  (direnv-mode))
 
 (use-package yaml-mode)
 
+(use-package ansible
+  :hook (yaml-mode . ansible))
+
 (use-package bazel)
 
 (use-package markdown-mode
-  :ensure t
   :mode ("README\\.md\\'" . gfm-mode)
   :init (setq markdown-command "pandoc")
   :bind (:map markdown-mode-map
@@ -215,3 +221,16 @@
 (use-package cmake-mode)
 
 (use-package clojure-mode)
+
+(use-package erlang)
+
+(use-package projectile
+  :hook (prog-mode . projectile-mode)
+  :bind (:map projectile-mode-map
+              ("C-c p" . projectile-command-map)))
+
+(use-package visual-fill-column
+  :hook (visual-line-mode . visual-fill-column-mode))
+
+(use-package ox-hugo
+  :after ox)
