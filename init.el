@@ -77,7 +77,8 @@
   (add-to-list 'major-mode-remap-alist '(c-mode . c-ts-mode))
   (add-to-list 'major-mode-remap-alist '(c++-mode . c++-ts-mode))
   (add-to-list 'major-mode-remap-alist
-               '(c-or-c++-mode . c-or-c++-ts-mode)))
+               '(c-or-c++-mode . c-or-c++-ts-mode))
+  (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-ts-mode)))
 
 (defun setup-custom-file ()
   (setq custom-file "~/.emacs.d/.local/custom.el")
