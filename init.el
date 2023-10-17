@@ -65,8 +65,10 @@
 
 (defun setup-tree-sitter ()
   (setq treesit-language-source-alist
-        '((cpp "https://github.com/tree-sitter/tree-sitter-cpp")
-	        (c "https://github.com/tree-sitter/tree-sitter-c")))
+        '((cpp . "https://github.com/tree-sitter/tree-sitter-cpp")
+	        (c . "https://github.com/tree-sitter/tree-sitter-c")
+          (typescript . ("https://github.com/tree-sitter/tree-sitter-typescript"
+                         "master" "typescript/src"))))
   (dolist (lang treesit-language-source-alist)
     (unless (treesit-language-available-p (car lang))
       (treesit-install-language-grammar (car lang))))
