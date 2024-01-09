@@ -223,6 +223,8 @@
 
 (use-package erlang)
 
+(use-package zig-mode)
+
 (use-package projectile
   :hook (prog-mode . projectile-mode)
   :bind (:map projectile-mode-map
