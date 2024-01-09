@@ -66,8 +66,7 @@
   (when (eq system-type 'darwin)
     (set-face-attribute 'default nil :family "JetBrains Mono")
     (set-face-attribute 'default nil :weight 'light)
-    (set-face-attribute 'default nil :height 140))
-  )
+    (set-face-attribute 'default nil :height 145)))
 
 (defun setup-tree-sitter ()
   (setq treesit-language-source-alist
