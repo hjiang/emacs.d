@@ -235,3 +235,18 @@
 
 (use-package ox-hugo
   :after ox)
+
+(defun read-file-or-nil (filename)
+  "Read file FILENAME, returning the contents as a string, or nil if it doesn't exist."
+  (condition-case nil
+      (with-temp-buffer
+        (insert-file-contents filename)
+        (buffer-string))
+    (file-error nil)))
+
+(use-package wakatime-mode
+  :config
+  (let ((apikey (string-trim (read-file-or-nil "~/.config/wakatime/apikey"))))
+    (when apikey
+      (setq wakatime-api-key apikey)
+      (global-wakatime-mode))))
