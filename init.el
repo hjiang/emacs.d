@@ -103,6 +103,8 @@
 (use-package emacs
   :ensure nil
   :straight nil
+  :hook
+  (before-save . delete-trailing-whitespace)
   :config
   (cleanup-clutter)
   (setq-default line-spacing 0.2
