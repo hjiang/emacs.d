@@ -132,6 +132,11 @@
   (maybe-setup-macos)
   (add-to-list 'auto-mode-alist '("\\.hujson\\'" . js-json-mode)))
 
+(use-package lsp-mode
+  :hook
+  (erlang-mode . lsp))
+
+(use-package lsp-ui)
 (use-package org
   :ensure t
   :init
