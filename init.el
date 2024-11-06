@@ -98,7 +98,8 @@
 (defun maybe-setup-macos ()
   (when (eq system-type 'darwin)
     (setq mac-option-modifier 'super
-          mac-command-modifier 'meta)))
+          mac-command-modifier 'meta)
+    (pixel-scroll-precision-mode 1)))
 
 (use-package emacs
   :ensure nil
