@@ -147,6 +147,8 @@
   (erlang-mode . lsp))
 
 (use-package lsp-ui)
+
+(use-package which-key)
 (use-package org
   :ensure t
   :init
