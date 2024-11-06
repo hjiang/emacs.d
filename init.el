@@ -133,14 +133,27 @@
   (add-to-list 'auto-mode-alist '("\\.hujson\\'" . js-json-mode)))
 
 (use-package org
-  :ensure nil
-  :straight nil
+  :ensure t
   :init
   (setq org-directory "~/org")
   (setq org-agenda-files '("~/org/agenda"))
+  :hook
+  (visual-line-mode . org-mode)
   :config
   (setq org-adapt-indentation 'headline-data
-        org-hide-leading-stars t))
+        org-hide-leading-stars t)
+  ;; (defun my-org-export-filter-cjk-spaces (text backend info)
+  ;;   "Remove unwanted spaces between CJK characters."
+  ;;   (when (org-export-derived-backend-p backend 'html 'latex 'odt)
+  ;;     (replace-regexp-in-string "\\(\\cc\\) \\(\\cc\\)" "\\1\\2" text)))
+  ;; (add-to-list 'org-export-filter-paragraph-functions
+  ;;              'my-org-export-filter-cjk-spaces)
+  )
+
+(use-package org-modern
+  :ensure t
+  :hook
+  (org-mode . org-modern-mode))
 
 (use-package modus-themes
   :config
