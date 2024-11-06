@@ -73,7 +73,9 @@
         '((cpp . "https://github.com/tree-sitter/tree-sitter-cpp")
 	        (c . "https://github.com/tree-sitter/tree-sitter-c")
           (typescript . ("https://github.com/tree-sitter/tree-sitter-typescript"
-                         "master" "typescript/src"))))
+                         "master" "typescript/src"))
+          (javascript . ("https://github.com/tree-sitter/tree-sitter-javascript" "master" "src"))
+          (gdscript . ("https://github.com/PrestonKnopp/tree-sitter-gdscript" "master" "src"))))
   (dolist (lang treesit-language-source-alist)
     (unless (treesit-language-available-p (car lang))
       (treesit-install-language-grammar (car lang))))
@@ -83,7 +85,10 @@
   (add-to-list 'major-mode-remap-alist '(c++-mode . c++-ts-mode))
   (add-to-list 'major-mode-remap-alist
                '(c-or-c++-mode . c-or-c++-ts-mode))
-  (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-ts-mode)))
+  (add-to-list 'major-mode-remap-alist '(js2-mode . js-ts-mode))
+  (add-to-list 'major-mode-remap-alist '(gdscript-mode . gdscript-ts-mode))
+  (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-ts-mode))
+  (add-to-list 'auto-mode-alist '("\\.mjs\\'" . js-ts-mode)))
 
 (defun setup-custom-file ()
   (setq custom-file "~/.emacs.d/.local/custom.el")
