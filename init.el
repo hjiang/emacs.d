@@ -353,6 +353,8 @@
       (setq wakatime-api-key apikey)
       (global-wakatime-mode))))
 
+(use-package org-preview-html)
+
 (use-package go-mode
   :hook
   (before-save . gofmt-before-save)
