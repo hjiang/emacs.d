@@ -381,10 +381,29 @@
 
 (use-package org-preview-html)
 
+(defun elixir-format-buffer ()
+  "Format the current buffer using mix format."
+  (when (and (or (eq major-mode 'elixir-mode)
+                 (eq major-mode 'elixir-ts-mode))
+             (executable-find "mix"))
+    (let ((file (buffer-file-name)))
+      (when file
+        (call-process "mix" nil nil nil "format" file)
+        (revert-buffer nil t t)))))
+
 (use-package go-mode
   :hook
   (before-save . gofmt-before-save)
   (go-mode . lsp-deferred))
+
+(use-package elixir-ts-mode
+  :ensure t
+  :hook
+  (after-save . elixir-format-buffer))
+
+(use-package alchemist
+  :ensure t)
+
 ;; Colorize compilation buffers
 (if (>= emacs-major-version 28)
     (add-hook 'compilation-filter-hook 'ansi-color-compilation-filter)
