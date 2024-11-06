@@ -64,7 +64,7 @@
 (defun setup-fonts ()
   ;; See https://www.emacswiki.org/emacs/SetFonts#h5o-16
   (when (eq system-type 'darwin)
-    (set-face-attribute 'default nil :family "JetBrains Mono")
+    (set-face-attribute 'default nil :family "FiraCode Nerd Font Mono")
     (set-face-attribute 'default nil :weight 'light)
     (set-face-attribute 'default nil :height 145)))
 
