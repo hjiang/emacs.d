@@ -353,6 +353,10 @@
       (setq wakatime-api-key apikey)
       (global-wakatime-mode))))
 
+(use-package go-mode
+  :hook
+  (before-save . gofmt-before-save)
+  (go-mode . lsp-deferred))
 ;; Colorize compilation buffers
 (if (>= emacs-major-version 28)
     (add-hook 'compilation-filter-hook 'ansi-color-compilation-filter)
