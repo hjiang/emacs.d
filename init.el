@@ -101,6 +101,15 @@
           mac-command-modifier 'meta)
     (pixel-scroll-precision-mode 1)))
 
+(defun smart-split ()
+  "Split the window into 100-column sub-windows."
+  (interactive)
+  (cl-labels ((smart-split-helper (w)
+                                  (if (> (window-width w) 180)
+                                      (let ((w2 (split-window w 100 t)))
+                                        (smart-split-helper w2)))))
+    (smart-split-helper nil)))
+
 (use-package emacs
   :ensure nil
   :straight nil
