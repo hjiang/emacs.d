@@ -298,8 +298,8 @@
 
 (use-package flycheck
   :init (global-flycheck-mode)
-  :config
-  (setq-default flycheck-clang-language-standard "c++20"))
+  :hook (c++-ts-mode . (lambda ()
+                         (setq-local flycheck-clang-language-standard "c++20"))))
 
 (use-package direnv
  :config
