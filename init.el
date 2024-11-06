@@ -111,7 +111,7 @@
     (smart-split-helper nil)))
 
 (use-package emacs
-  :ensure nil
+  :straight nil
   :straight nil
   :hook
   (before-save . delete-trailing-whitespace)
@@ -149,7 +149,7 @@
 (use-package lsp-ui)
 
 (use-package which-key
-  :ensure t
+  :straight t
   :init
   (which-key-mode 1))
 
@@ -158,7 +158,7 @@
   (yas-global-mode 1))
 
 (use-package org
-  :ensure t
+  :straight t
   :init
   (setq org-directory "~/org")
   (setq org-agenda-files '("~/org/agenda"))
@@ -176,7 +176,7 @@
   )
 
 (use-package org-modern
-  :ensure t
+  :straight t
   :hook
   (org-mode . org-modern-mode))
 
@@ -288,7 +288,7 @@
 
 (use-package copilot
   :straight (:host github :repo "copilot-emacs/copilot.el" :files ("dist" "*.el"))
-  :ensure t
+  :straight t
   :hook (prog-mode . copilot-mode)
   :bind (:map copilot-completion-map
          ("C-f" . copilot-accept-completion-by-line)
@@ -308,7 +308,7 @@
 (use-package vterm)
 
 (use-package eglot
-  :ensure nil
+  :straight nil
   :straight nil
   :hook (c++-ts-mode . (lambda ()
                          (eglot-ensure)
@@ -397,12 +397,12 @@
   (go-mode . lsp-deferred))
 
 (use-package elixir-ts-mode
-  :ensure t
+  :straight t
   :hook
   (after-save . elixir-format-buffer))
 
 (use-package alchemist
-  :ensure t)
+  :straight t)
 
 ;; Colorize compilation buffers
 (if (>= emacs-major-version 28)
