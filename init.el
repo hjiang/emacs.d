@@ -13,8 +13,8 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
-(setq straight-use-package-by-default t)
 (straight-use-package 'use-package)
+(setq straight-use-package-by-default t)
 
 (defun indent-buffer ()
   (interactive)
@@ -112,7 +112,6 @@
 
 (use-package emacs
   :straight nil
-  :straight nil
   :hook
   (before-save . delete-trailing-whitespace)
   :config
@@ -149,7 +148,6 @@
 (use-package lsp-ui)
 
 (use-package which-key
-  :straight t
   :init
   (which-key-mode 1))
 
@@ -158,7 +156,6 @@
   (yas-global-mode 1))
 
 (use-package org
-  :straight t
   :init
   (setq org-directory "~/org")
   (setq org-agenda-files '("~/org/agenda"))
@@ -176,7 +173,6 @@
   )
 
 (use-package org-modern
-  :straight t
   :hook
   (org-mode . org-modern-mode))
 
@@ -288,7 +284,6 @@
 
 (use-package copilot
   :straight (:host github :repo "copilot-emacs/copilot.el" :files ("dist" "*.el"))
-  :straight t
   :hook (prog-mode . copilot-mode)
   :bind (:map copilot-completion-map
          ("C-f" . copilot-accept-completion-by-line)
@@ -309,7 +304,6 @@
 
 (use-package eglot
   :straight nil
-  :straight nil
   :hook (c++-ts-mode . (lambda ()
                          (eglot-ensure)
                          (setq-local electric-indent-chars
@@ -322,8 +316,8 @@
                          (setq-local flycheck-clang-language-standard "c++20"))))
 
 (use-package direnv
- :config
- (direnv-mode))
+  :config
+  (direnv-mode))
 
 (use-package yaml-mode)
 
@@ -397,12 +391,10 @@
   (go-mode . lsp-deferred))
 
 (use-package elixir-ts-mode
-  :straight t
   :hook
   (after-save . elixir-format-buffer))
 
-(use-package alchemist
-  :straight t)
+(use-package alchemist)
 
 ;; Colorize compilation buffers
 (if (>= emacs-major-version 28)
