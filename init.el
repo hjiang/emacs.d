@@ -317,7 +317,8 @@
   :mode ("README\\.md\\'" . gfm-mode)
   :init (setq markdown-command "pandoc")
   :bind (:map markdown-mode-map
-              ("C-c C-e" . markdown-do)))
+              ("C-c C-e" . markdown-do))
+  :hook (visual-line-mode . markdown-mode))
 
 (use-package cmake-mode)
 
