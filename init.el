@@ -129,7 +129,8 @@
   (setup-tree-sitter)
   (fido-mode)
   (setup-custom-file)
-  (maybe-setup-macos))
+  (maybe-setup-macos)
+  (add-to-list 'auto-mode-alist '("\\.hujson\\'" . js-json-mode)))
 
 (use-package org
   :ensure nil
