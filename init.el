@@ -327,6 +327,12 @@
 
 (use-package zig-mode)
 
+(use-package gdscript-mode
+    :straight (gdscript-mode
+               :type git
+               :host github
+               :repo "godotengine/emacs-gdscript-mode"))
+
 (use-package projectile
   :hook (prog-mode . projectile-mode)
   :bind (:map projectile-mode-map
