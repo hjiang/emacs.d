@@ -148,7 +148,11 @@
 
 (use-package lsp-ui)
 
-(use-package which-key)
+(use-package which-key
+  :ensure t
+  :init
+  (which-key-mode 1))
+
 (use-package org
   :ensure t
   :init
