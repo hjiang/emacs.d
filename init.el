@@ -267,13 +267,18 @@
   (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode)))
 
 (use-package copilot
-  :straight (:host github :repo "zerolfx/copilot.el" :files ("dist" "*.el"))
+  :straight (:host github :repo "copilot-emacs/copilot.el" :files ("dist" "*.el"))
   :ensure t
   :hook (prog-mode . copilot-mode)
   :bind (:map copilot-completion-map
          ("C-f" . copilot-accept-completion-by-line)
          ("C-e" . copilot-accept-completion)
-         ("C-g" . copilot-clear-overlay)))
+         ("C-g" . copilot-clear-overlay))
+  :config
+  (add-to-list 'copilot-indentation-alist '(emacs-lisp-mode 2))
+  (add-to-list 'copilot-indentation-alist '(ld-script-mode 2))
+  (add-to-list 'copilot-indentation-alist '(elixir-mode 2))
+  (add-to-list 'copilot-indentation-alist '(go-mode 2)))
 
 (use-package magit)
 
