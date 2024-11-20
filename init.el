@@ -56,6 +56,10 @@
       (load-env-file env-file))
     (reload-env)))
 
+(let ((secrets-file "~/.emacs.d/.local/secrets.el"))
+  (when (file-readable-p secrets-file)
+    (load-file secrets-file)))
+
 (defun cleanup-clutter ()
   (menu-bar-mode -1)
   (tool-bar-mode -1)
@@ -398,6 +402,13 @@
   (after-save . elixir-format-buffer))
 
 (use-package alchemist)
+
+(when (boundp 'anthropic-api-key)
+  (use-package gptel
+    :config
+    (setq gptel-backend (gptel-make-anthropic "Claude"
+                          :stream t
+                          :key anthropic-api-key))))
 
 ;; Colorize compilation buffers
 (if (>= emacs-major-version 28)
