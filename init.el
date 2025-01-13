@@ -73,7 +73,17 @@
   (when (eq system-type 'darwin)
     (set-face-attribute 'default nil :family "FiraCode Nerd Font Mono")
     (set-face-attribute 'default nil :weight 'light)
-    (set-face-attribute 'default nil :height 145)))
+    (set-face-attribute 'default nil :height 145))
+  (when (eq system-type 'gnu/linux)
+    (set-face-attribute 'default nil :family "Fira Code"
+                        :weight 'light
+                        :height 135)
+    (dolist (charset '(kana han symbol cjk-misc bopomofo))
+      (set-fontset-font (frame-parameter nil 'font)
+                        charset
+                        (font-spec :family "Noto Sans CJK SC"
+                                   :weight 'regular
+                                   :size 18)))))
 
 (defun setup-tree-sitter ()
   (setq treesit-language-source-alist
