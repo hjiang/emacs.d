@@ -413,6 +413,10 @@
 
 (use-package alchemist)
 
+(use-package sly
+  :config
+  (setq inferior-lisp-program "sbcl"))
+
 (when (boundp 'anthropic-api-key)
   (use-package gptel
     :config
