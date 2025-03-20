@@ -361,6 +361,10 @@
 
 (use-package zig-mode)
 
+(use-package platformio-mode
+  :hook (c++-ts-mode . (lambda ()
+                         (platformio-conditionally-enable))))
+
 (use-package gdscript-mode
     :straight (gdscript-mode
                :type git
