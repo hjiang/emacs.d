@@ -403,6 +403,8 @@
   (go-mode . lsp-deferred))
 
 (use-package elixir-ts-mode
+  :straight (:type built-in)
+  :defer t
   :hook
   (after-save . elixir-format-buffer))
 
