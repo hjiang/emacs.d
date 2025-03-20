@@ -312,7 +312,8 @@
   (add-to-list 'copilot-indentation-alist '(emacs-lisp-mode 2))
   (add-to-list 'copilot-indentation-alist '(ld-script-mode 2))
   (add-to-list 'copilot-indentation-alist '(elixir-mode 2))
-  (add-to-list 'copilot-indentation-alist '(go-mode 2)))
+  (add-to-list 'copilot-indentation-alist '(go-mode 2))
+  (add-to-list 'copilot-indentation-alist '(dockerfile-ts-mode 4)))
 
 (use-package magit)
 
