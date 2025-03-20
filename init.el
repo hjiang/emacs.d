@@ -86,13 +86,15 @@
                                    :size 18)))))
 
 (defun setup-tree-sitter ()
+  (interactive)
   (setq treesit-language-source-alist
         '((cpp . "https://github.com/tree-sitter/tree-sitter-cpp")
 	        (c . "https://github.com/tree-sitter/tree-sitter-c")
           (typescript . ("https://github.com/tree-sitter/tree-sitter-typescript"
                          "master" "typescript/src"))
           (javascript . ("https://github.com/tree-sitter/tree-sitter-javascript" "master" "src"))
-          (gdscript . ("https://github.com/PrestonKnopp/tree-sitter-gdscript" "master" "src"))))
+          (gdscript . ("https://github.com/PrestonKnopp/tree-sitter-gdscript" "master" "src"))
+          (dockerfile . ("https://github.com/camdencheek/tree-sitter-dockerfile" "main" "src"))))
   (dolist (lang treesit-language-source-alist)
     (unless (treesit-language-available-p (car lang))
       (treesit-install-language-grammar (car lang))))
@@ -403,6 +405,12 @@
 (use-package elixir-ts-mode
   :hook
   (after-save . elixir-format-buffer))
+
+(use-package dockerfile-ts-mode
+  :straight (:type built-in)
+  :defer t
+  :mode (("\\Dockerfile\\'" . dockerfile-ts-mode)
+         ("\\.dockerignore\\'" . dockerfile-ts-mode)))
 
 (use-package alchemist)
 
