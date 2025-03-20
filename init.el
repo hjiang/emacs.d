@@ -383,13 +383,6 @@
         (buffer-string))
     (file-error nil)))
 
-(use-package wakatime-mode
-  :config
-  (let ((apikey (string-trim (read-file-or-nil "~/.config/wakatime/apikey"))))
-    (when apikey
-      (setq wakatime-api-key apikey)
-      (global-wakatime-mode))))
-
 (use-package org-preview-html)
 
 (defun elixir-format-buffer ()
