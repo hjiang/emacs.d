@@ -178,8 +178,6 @@
   :init
   (setq org-directory "~/org")
   (setq org-agenda-files '("~/org/agenda"))
-  :hook
-  (visual-line-mode . org-mode)
   :config
   (setq org-adapt-indentation 'headline-data
         org-hide-leading-stars t)
@@ -350,8 +348,7 @@
   :mode ("README\\.md\\'" . gfm-mode)
   :init (setq markdown-command "pandoc")
   :bind (:map markdown-mode-map
-              ("C-c C-e" . markdown-do))
-  :hook (visual-line-mode . markdown-mode))
+              ("C-c C-e" . markdown-do)))
 
 (use-package cmake-mode)
 
@@ -377,7 +374,9 @@
               ("C-c p" . projectile-command-map)))
 
 (use-package visual-fill-column
-  :hook (visual-line-mode . visual-fill-column-mode))
+  :hook
+  (org-mode . visual-line-fill-column-mode)
+  (markdown-mode . visual-line-fill-column-mode))
 
 (use-package ox-hugo
   :after ox)
