@@ -307,6 +307,10 @@
          ("C-e" . copilot-accept-completion)
          ("C-g" . copilot-clear-overlay))
   :config
+  ;; Check and install copilot language server if not present
+  (unless (file-exists-p (expand-file-name "~/.emacs.d/.cache/copilot/bin/copilot-language-server"))
+    (copilot-install-server))
+  
   (add-to-list 'copilot-indentation-alist '(emacs-lisp-mode 2))
   (add-to-list 'copilot-indentation-alist '(ld-script-mode 2))
   (add-to-list 'copilot-indentation-alist '(elixir-mode 2))
