@@ -303,8 +303,8 @@
   :straight (:host github :repo "copilot-emacs/copilot.el" :files ("dist" "*.el"))
   :hook (prog-mode . copilot-mode)
   :bind (:map copilot-completion-map
-         ("C-f" . copilot-accept-completion-by-line)
-         ("C-e" . copilot-accept-completion)
+         ("C-<return>" . copilot-accept-completion-by-line)
+         ("M-C-<return>" . copilot-accept-completion)
          ("C-g" . copilot-clear-overlay))
   :config
   ;; Check and install copilot language server if not present
