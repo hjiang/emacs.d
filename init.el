@@ -16,7 +16,13 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
+;; Suppress byte-compiler warnings for dynamic loading
+(declare-function straight-use-package "straight")
+(declare-function ansi-color-apply-on-region "ansi-color")
+
 (straight-use-package 'use-package)
+(require 'use-package)
+(defvar straight-use-package-by-default)
 (setq straight-use-package-by-default t)
 
 (defun indent-buffer ()
@@ -87,6 +93,7 @@
 
 (defun setup-tree-sitter ()
   (interactive)
+  (defvar treesit-language-source-alist)
   (setq treesit-language-source-alist
         '((cpp . "https://github.com/tree-sitter/tree-sitter-cpp")
 	        (c . "https://github.com/tree-sitter/tree-sitter-c")
@@ -129,10 +136,16 @@
                                         (smart-split-helper w2)))))
     (smart-split-helper nil)))
 
+(defun auto-compile-init-file ()
+  "Automatically compile init file when it's saved."
+  (when (equal buffer-file-name (expand-file-name "~/.emacs.d/init.el"))
+    (byte-compile-file buffer-file-name)))
+
 (use-package emacs
-  :straight nil
+  :straight (:type built-in)
   :hook
   (before-save . delete-trailing-whitespace)
+  (after-save . auto-compile-init-file)
   :config
   (cleanup-clutter)
   (setq-default line-spacing 0.2
@@ -161,20 +174,25 @@
   (add-to-list 'auto-mode-alist '("\\.hujson\\'" . js-json-mode)))
 
 (use-package lsp-mode
+  :straight t
   :hook
   (erlang-mode . lsp))
 
-(use-package lsp-ui)
+(use-package lsp-ui
+  :straight t)
 
 (use-package which-key
+  :straight t
   :init
   (which-key-mode 1))
 
 (use-package yasnippet
+  :straight t
   :config
   (yas-global-mode 1))
 
 (use-package org
+  :straight t
   :init
   (setq org-directory "~/org")
   (setq org-agenda-files '("~/org/agenda"))
@@ -190,10 +208,12 @@
   )
 
 (use-package org-modern
+  :straight t
   :hook
   (org-mode . org-modern-mode))
 
 (use-package modus-themes
+  :straight t
   :config
   (setq modus-themes-common-palette-overrides
 	      ;; Make the mode line borderless
@@ -204,6 +224,7 @@
   (load-theme 'modus-vivendi :no-confirm))
 
 (use-package ligature
+  :straight t
   :config
   ;; Enable the "www" ligature in every possible major mode
   (ligature-set-ligatures 't '("www"))
@@ -274,28 +295,34 @@
   (global-ligature-mode t))
 
 (use-package vertico
+  :straight t
   :init
   (vertico-mode))
 
 (use-package prescient
+  :straight t
   :init
   (add-to-list 'completion-styles 'prescient))
 
 (use-package vertico-prescient
+  :straight t
   :init
   (vertico-prescient-mode))
 
 (use-package consult
+  :straight t
   :bind (("C-x b" . consult-buffer)
          ("M-g g" . consult-goto-line)))
 
 (use-package marginalia
+  :straight t
   :bind (:map minibuffer-local-map
          ("M-A" . marginalia-cycle))
   :init
   (marginalia-mode))
 
 (use-package nov
+  :straight t
   :config
   (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode)))
 
@@ -317,12 +344,15 @@
   (add-to-list 'copilot-indentation-alist '(go-mode 2))
   (add-to-list 'copilot-indentation-alist '(dockerfile-ts-mode 4)))
 
-(use-package magit)
+(use-package magit
+  :straight t)
 
 (use-package ansi-color
+  :straight t
   :hook (compilation-filter . ansi-color-compilation-filter))
 
-(use-package vterm)
+(use-package vterm
+  :straight t)
 
 (use-package eglot
   :straight nil
@@ -333,36 +363,47 @@
                          (add-hook 'before-save-hook #'eglot-format-buffer nil t))))
 
 (use-package flycheck
+  :straight t
   :init (global-flycheck-mode)
   :hook (c++-ts-mode . (lambda ()
                          (setq-local flycheck-clang-language-standard "c++20"))))
 
 (use-package direnv
+  :straight t
   :config
   (direnv-mode))
 
-(use-package yaml-mode)
+(use-package yaml-mode
+  :straight t)
 
 (use-package ansible
-  :hook (yaml-mode . ansible))
+  :straight t
+  :hook (yaml-mode . ansible-mode))
 
-(use-package bazel)
+(use-package bazel
+  :straight t)
 
 (use-package markdown-mode
+  :straight t
   :mode ("README\\.md\\'" . gfm-mode)
   :init (setq markdown-command "pandoc")
   :bind (:map markdown-mode-map
               ("C-c C-e" . markdown-do)))
 
-(use-package cmake-mode)
+(use-package cmake-mode
+  :straight t)
 
-(use-package clojure-mode)
+(use-package clojure-mode
+  :straight t)
 
-(use-package erlang)
+(use-package erlang
+  :straight t)
 
-(use-package zig-mode)
+(use-package zig-mode
+  :straight t)
 
 (use-package platformio-mode
+  :straight t
   :hook (c++-ts-mode . (lambda ()
                          (platformio-conditionally-enable))))
 
@@ -373,27 +414,32 @@
                :repo "godotengine/emacs-gdscript-mode"))
 
 (use-package projectile
+  :straight t
   :hook (prog-mode . projectile-mode)
   :bind (:map projectile-mode-map
               ("C-c p" . projectile-command-map)))
 
 (use-package visual-fill-column
+  :straight t
   :hook
   (org-mode . visual-line-fill-column-mode)
   (markdown-mode . visual-line-fill-column-mode))
 
 (use-package ox-hugo
+  :straight t
   :after ox)
 
 (defun read-file-or-nil (filename)
-  "Read file FILENAME, returning the contents as a string, or nil if it doesn't exist."
+  "Read file FILENAME, returning the contents as a string, or nil if it
+doesn't exist."
   (condition-case nil
       (with-temp-buffer
         (insert-file-contents filename)
         (buffer-string))
     (file-error nil)))
 
-(use-package org-preview-html)
+(use-package org-preview-html
+  :straight t)
 
 (defun elixir-format-buffer ()
   "Format the current buffer using mix format."
@@ -406,6 +452,7 @@
         (revert-buffer nil t t)))))
 
 (use-package go-mode
+  :straight t
   :hook
   (before-save . gofmt-before-save)
   (go-mode . lsp-deferred))
@@ -422,9 +469,11 @@
   :mode (("\\Dockerfile\\'" . dockerfile-ts-mode)
          ("\\.dockerignore\\'" . dockerfile-ts-mode)))
 
-(use-package alchemist)
+(use-package alchemist
+  :straight t)
 
 (use-package sly
+  :straight t
   :config
   (setq inferior-lisp-program "sbcl"))
 
@@ -441,6 +490,7 @@
 (if (>= emacs-major-version 28)
     (add-hook 'compilation-filter-hook 'ansi-color-compilation-filter)
   (progn
+    (defvar compilation-filter-start)
     (defun colorize-compilation-buffer ()
       (let ((inhibit-read-only t))
         (ansi-color-apply-on-region compilation-filter-start (point))))
