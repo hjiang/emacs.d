@@ -1,4 +1,14 @@
 ;; -*- mode: emacs-lisp; lexical-binding: t; -*-
+;;; init.el --- Emacs configuration -*- lexical-binding: t; -*-
+
+;;; Commentary:
+;; Personal Emacs configuration using straight.el and use-package.
+
+;;; Code:
+
+;;; ============================================================================
+;;; Package Management Bootstrap
+;;; ============================================================================
 
 (defvar bootstrap-version)
 (let ((bootstrap-file
@@ -20,126 +30,33 @@
 (declare-function straight-use-package "straight")
 (declare-function ansi-color-apply-on-region "ansi-color")
 
+;; Configure use-package with straight.el
 (straight-use-package 'use-package)
 (require 'use-package)
 (defvar straight-use-package-by-default)
 (setq straight-use-package-by-default t)
 
-(defun indent-buffer ()
-  (interactive)
-  (save-excursion
-    (indent-region (point-min) (point-max) nil)))
+;;; ============================================================================
+;;; Custom Functions and Local Configuration
+;;; ============================================================================
 
-(defun load-env-file (file)
-  "Read and set envvars from FILE."
-  (if (null (file-exists-p file))
-      (signal 'file-error
-              (list "No envvar file exists." file
-                    "See https://github.com/hjiang/envel."))
-    (with-temp-buffer
-      (insert-file-contents file)
-      (when-let (env (read (current-buffer)))
-        (let ((tz (getenv-internal "TZ")))
-          (setq-default
-           process-environment
-           (append env (default-value 'process-environment))
-           exec-path
-           (append (split-string (getenv "PATH") path-separator t)
-                   (list exec-directory))
-           shell-file-name
-           (or (getenv "SHELL")
-               (default-value 'shell-file-name)))
-          (when-let (newtz (getenv-internal "TZ"))
-            (unless (equal tz newtz)
-              (set-time-zone-rule newtz))))
-        env))))
+;; Load custom functions
+(add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
+(require 'custom-functions)
 
+;; Load environment variables if available
 (let ((env-file "~/.emacs.d/.local/env.el"))
   (when (file-readable-p env-file)
-    (defun reload-env ()
-      "Reload environment variables"
-      (interactive)
-      (load-env-file env-file))
-    (reload-env)))
+    (load-env-file env-file)))
 
+;; Load secrets (API keys, tokens, etc.)
 (let ((secrets-file "~/.emacs.d/.local/secrets.el"))
   (when (file-readable-p secrets-file)
     (load-file secrets-file)))
 
-(defun cleanup-clutter ()
-  (menu-bar-mode -1)
-  (tool-bar-mode -1)
-  (if (display-graphic-p)
-      (scroll-bar-mode -1))
-  (setq inhibit-startup-message t
-        initial-scratch-message nil))
-
-(defun setup-fonts ()
-  ;; See https://www.emacswiki.org/emacs/SetFonts#h5o-16
-  (when (eq system-type 'darwin)
-    (set-face-attribute 'default nil :family "FiraCode Nerd Font Mono")
-    (set-face-attribute 'default nil :weight 'light)
-    (set-face-attribute 'default nil :height 145))
-  (when (eq system-type 'gnu/linux)
-    (set-face-attribute 'default nil :family "Fira Code"
-                        :weight 'light
-                        :height 135)
-    (dolist (charset '(kana han symbol cjk-misc bopomofo))
-      (set-fontset-font (frame-parameter nil 'font)
-                        charset
-                        (font-spec :family "Noto Sans CJK SC"
-                                   :weight 'regular
-                                   :size 18)))))
-
-(defun setup-tree-sitter ()
-  (interactive)
-  (defvar treesit-language-source-alist)
-  (setq treesit-language-source-alist
-        '((cpp . "https://github.com/tree-sitter/tree-sitter-cpp")
-	        (c . "https://github.com/tree-sitter/tree-sitter-c")
-          (typescript . ("https://github.com/tree-sitter/tree-sitter-typescript"
-                         "master" "typescript/src"))
-          (javascript . ("https://github.com/tree-sitter/tree-sitter-javascript" "master" "src"))
-          (gdscript . ("https://github.com/PrestonKnopp/tree-sitter-gdscript" "master" "src"))
-          (dockerfile . ("https://github.com/camdencheek/tree-sitter-dockerfile" "main" "src"))))
-  (dolist (lang treesit-language-source-alist)
-    (unless (treesit-language-available-p (car lang))
-      (treesit-install-language-grammar (car lang))))
-  (setq treesit-load-name-override-list
-        '((c++ "libtree-sitter-cpp")))
-  (add-to-list 'major-mode-remap-alist '(c-mode . c-ts-mode))
-  (add-to-list 'major-mode-remap-alist '(c++-mode . c++-ts-mode))
-  (add-to-list 'major-mode-remap-alist
-               '(c-or-c++-mode . c-or-c++-ts-mode))
-  (add-to-list 'major-mode-remap-alist '(js2-mode . js-ts-mode))
-  (add-to-list 'major-mode-remap-alist '(gdscript-mode . gdscript-ts-mode))
-  (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-ts-mode))
-  (add-to-list 'auto-mode-alist '("\\.mjs\\'" . js-ts-mode)))
-
-(defun setup-custom-file ()
-  (setq custom-file "~/.emacs.d/.local/custom.el")
-  (when (file-readable-p custom-file)
-    (load custom-file)))
-
-(defun maybe-setup-macos ()
-  (when (eq system-type 'darwin)
-    (setq mac-option-modifier 'super
-          mac-command-modifier 'meta)
-    (pixel-scroll-precision-mode 1)))
-
-(defun smart-split ()
-  "Split the window into 100-column sub-windows."
-  (interactive)
-  (cl-labels ((smart-split-helper (w)
-                                  (if (> (window-width w) 180)
-                                      (let ((w2 (split-window w 100 t)))
-                                        (smart-split-helper w2)))))
-    (smart-split-helper nil)))
-
-(defun auto-compile-init-file ()
-  "Automatically compile init file when it's saved."
-  (when (equal buffer-file-name (expand-file-name "~/.emacs.d/init.el"))
-    (byte-compile-file buffer-file-name)))
+;;; ============================================================================
+;;; Core Emacs Configuration
+;;; ============================================================================
 
 (use-package emacs
   :straight (:type built-in)
@@ -173,6 +90,10 @@
   (maybe-setup-macos)
   (add-to-list 'auto-mode-alist '("\\.hujson\\'" . js-json-mode)))
 
+;;; ============================================================================
+;;; Development Tools - LSP & Language Support
+;;; ============================================================================
+
 (use-package lsp-mode
   :straight t
   :hook
@@ -180,6 +101,91 @@
 
 (use-package lsp-ui
   :straight t)
+
+(use-package eglot
+  :straight nil
+  :hook (c++-ts-mode . (lambda ()
+                         (eglot-ensure)
+                         (setq-local electric-indent-chars
+                                     (remq ?\n electric-indent-chars))
+                         (add-hook 'before-save-hook #'eglot-format-buffer nil t))))
+
+(use-package flycheck
+  :straight t
+  :init (global-flycheck-mode)
+  :hook (c++-ts-mode . (lambda ()
+                         (setq-local flycheck-clang-language-standard "c++20"))))
+
+;; Language-specific modes and tools
+(use-package yaml-mode
+  :straight t)
+
+(use-package ansible
+  :straight t
+  :hook (yaml-mode . ansible-mode))
+
+(use-package bazel
+  :straight t)
+
+(use-package markdown-mode
+  :straight t
+  :mode ("README\\.md\\'" . gfm-mode)
+  :init (setq markdown-command "pandoc")
+  :bind (:map markdown-mode-map
+              ("C-c C-e" . markdown-do)))
+
+(use-package cmake-mode
+  :straight t)
+
+(use-package clojure-mode
+  :straight t)
+
+(use-package erlang
+  :straight t)
+
+(use-package zig-mode
+  :straight t)
+
+(use-package platformio-mode
+  :straight t
+  :hook (c++-ts-mode . (lambda ()
+                         (platformio-conditionally-enable))))
+
+(use-package gdscript-mode
+  :straight (gdscript-mode
+             :type git
+             :host github
+             :repo "godotengine/emacs-gdscript-mode"))
+
+(use-package go-mode
+  :straight t
+  :hook
+  (before-save . gofmt-before-save)
+  (go-mode . lsp-deferred))
+
+(use-package elixir-ts-mode
+  :straight (:type built-in)
+  :defer t
+  :hook
+  (after-save . elixir-format-buffer))
+
+(use-package dockerfile-ts-mode
+  :straight (:type built-in)
+  :defer t
+  :mode (("\\Dockerfile\\'" . dockerfile-ts-mode)
+         ("\\.dockerignore\\'" . dockerfile-ts-mode)))
+
+(use-package alchemist
+  :straight t)
+
+(use-package sly
+  :straight t
+  :config
+  (setq inferior-lisp-program "sbcl"))
+
+;;; ============================================================================
+;;; UI & Editing Enhancement
+;;; ============================================================================
 
 (use-package which-key
   :straight t
@@ -190,6 +196,10 @@
   :straight t
   :config
   (yas-global-mode 1))
+
+;;; ============================================================================
+;;; Org Mode & Knowledge Management
+;;; ============================================================================
 
 (use-package org
   :straight t
@@ -211,6 +221,23 @@
   :straight t
   :hook
   (org-mode . org-modern-mode))
+
+(use-package visual-fill-column
+  :straight t
+  :hook
+  (org-mode . visual-line-fill-column-mode)
+  (markdown-mode . visual-line-fill-column-mode))
+
+(use-package ox-hugo
+  :straight t
+  :after ox)
+
+(use-package org-preview-html
+  :straight t)
+
+;;; ============================================================================
+;;; Themes & Visual Appearance
+;;; ============================================================================
 
 (use-package modus-themes
   :straight t
@@ -294,6 +321,10 @@
   ;; per mode with `ligature-mode'.
   (global-ligature-mode t))
 
+;;; ============================================================================
+;;; Completion & Search
+;;; ============================================================================
+
 (use-package vertico
   :straight t
   :init
@@ -321,10 +352,18 @@
   :init
   (marginalia-mode))
 
+;;; ============================================================================
+;;; File Viewers & Readers
+;;; ============================================================================
+
 (use-package nov
   :straight t
   :config
   (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode)))
+
+;;; ============================================================================
+;;; AI & Development Assistance
+;;; ============================================================================
 
 (use-package copilot
   :straight (:host github :repo "copilot-emacs/copilot.el" :files ("dist" "*.el"))
@@ -344,8 +383,22 @@
   (add-to-list 'copilot-indentation-alist '(go-mode 2))
   (add-to-list 'copilot-indentation-alist '(dockerfile-ts-mode 4)))
 
+;;; ============================================================================
+;;; Version Control & Project Management
+;;; ============================================================================
+
 (use-package magit
   :straight t)
+
+(use-package projectile
+  :straight t
+  :hook (prog-mode . projectile-mode)
+  :bind (:map projectile-mode-map
+              ("C-c p" . projectile-command-map)))
+
+;;; ============================================================================
+;;; Terminal & System Integration
+;;; ============================================================================
 
 (use-package ansi-color
   :straight t
@@ -354,128 +407,10 @@
 (use-package vterm
   :straight t)
 
-(use-package eglot
-  :straight nil
-  :hook (c++-ts-mode . (lambda ()
-                         (eglot-ensure)
-                         (setq-local electric-indent-chars
-                                     (remq ?\n electric-indent-chars))
-                         (add-hook 'before-save-hook #'eglot-format-buffer nil t))))
-
-(use-package flycheck
-  :straight t
-  :init (global-flycheck-mode)
-  :hook (c++-ts-mode . (lambda ()
-                         (setq-local flycheck-clang-language-standard "c++20"))))
-
 (use-package direnv
   :straight t
   :config
   (direnv-mode))
-
-(use-package yaml-mode
-  :straight t)
-
-(use-package ansible
-  :straight t
-  :hook (yaml-mode . ansible-mode))
-
-(use-package bazel
-  :straight t)
-
-(use-package markdown-mode
-  :straight t
-  :mode ("README\\.md\\'" . gfm-mode)
-  :init (setq markdown-command "pandoc")
-  :bind (:map markdown-mode-map
-              ("C-c C-e" . markdown-do)))
-
-(use-package cmake-mode
-  :straight t)
-
-(use-package clojure-mode
-  :straight t)
-
-(use-package erlang
-  :straight t)
-
-(use-package zig-mode
-  :straight t)
-
-(use-package platformio-mode
-  :straight t
-  :hook (c++-ts-mode . (lambda ()
-                         (platformio-conditionally-enable))))
-
-(use-package gdscript-mode
-    :straight (gdscript-mode
-               :type git
-               :host github
-               :repo "godotengine/emacs-gdscript-mode"))
-
-(use-package projectile
-  :straight t
-  :hook (prog-mode . projectile-mode)
-  :bind (:map projectile-mode-map
-              ("C-c p" . projectile-command-map)))
-
-(use-package visual-fill-column
-  :straight t
-  :hook
-  (org-mode . visual-line-fill-column-mode)
-  (markdown-mode . visual-line-fill-column-mode))
-
-(use-package ox-hugo
-  :straight t
-  :after ox)
-
-(defun read-file-or-nil (filename)
-  "Read file FILENAME, returning the contents as a string, or nil if it
-doesn't exist."
-  (condition-case nil
-      (with-temp-buffer
-        (insert-file-contents filename)
-        (buffer-string))
-    (file-error nil)))
-
-(use-package org-preview-html
-  :straight t)
-
-(defun elixir-format-buffer ()
-  "Format the current buffer using mix format."
-  (when (and (or (eq major-mode 'elixir-mode)
-                 (eq major-mode 'elixir-ts-mode))
-             (executable-find "mix"))
-    (let ((file (buffer-file-name)))
-      (when file
-        (call-process "mix" nil nil nil "format" file)
-        (revert-buffer nil t t)))))
-
-(use-package go-mode
-  :straight t
-  :hook
-  (before-save . gofmt-before-save)
-  (go-mode . lsp-deferred))
-
-(use-package elixir-ts-mode
-  :straight (:type built-in)
-  :defer t
-  :hook
-  (after-save . elixir-format-buffer))
-
-(use-package dockerfile-ts-mode
-  :straight (:type built-in)
-  :defer t
-  :mode (("\\Dockerfile\\'" . dockerfile-ts-mode)
-         ("\\.dockerignore\\'" . dockerfile-ts-mode)))
-
-(use-package alchemist
-  :straight t)
-
-(use-package sly
-  :straight t
-  :config
-  (setq inferior-lisp-program "sbcl"))
 
 (use-package claude-code
   :straight (:type git :host github :repo "stevemolitor/claude-code.el" :branch "main" :depth 1
