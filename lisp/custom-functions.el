@@ -66,10 +66,40 @@ If ENV-FILE is not provided, uses ~/.emacs.d/.local/env.el"
   (when (file-readable-p custom-file)
     (load custom-file)))
 
-(defun auto-compile-init-file ()
-  "Automatically compile init file when it's saved."
-  (when (equal buffer-file-name (expand-file-name "~/.emacs.d/init.el"))
-    (byte-compile-file buffer-file-name)))
+(defun auto-compile-emacs-lisp-files ()
+  "Automatically compile Emacs Lisp files under ~/.emacs.d when saved."
+  (when (and buffer-file-name
+             (string-suffix-p ".el" buffer-file-name)
+             (string-prefix-p (expand-file-name "~/.emacs.d/") buffer-file-name))
+    (let ((byte-file (concat buffer-file-name "c")))
+      ;; Only compile if .elc doesn't exist or .el is newer
+      (when (or (not (file-exists-p byte-file))
+                (file-newer-than-file-p buffer-file-name byte-file))
+        (condition-case err
+            (progn
+              (byte-compile-file buffer-file-name)
+              (message "Compiled %s" (file-name-nondirectory buffer-file-name)))
+          (error
+           (message "Failed to compile %s: %s"
+                   (file-name-nondirectory buffer-file-name)
+                   (error-message-string err))))))))
+
+(defun clean-stale-elc-files (&optional directory)
+  "Delete .elc files that are older than their .el counterparts in DIRECTORY.
+If DIRECTORY is nil, defaults to ~/.emacs.d/"
+  (interactive)
+  (let ((dir (or directory (expand-file-name "~/.emacs.d/")))
+        (cleaned 0))
+    (dolist (file (directory-files-recursively dir "\\.elc$"))
+      (let ((el-file (concat (file-name-sans-extension file) ".el")))
+        (when (and (file-exists-p el-file)
+                   (file-newer-than-file-p el-file file))
+          (delete-file file)
+          (setq cleaned (1+ cleaned))
+          (message "Deleted stale file: %s" (file-name-nondirectory file)))))
+    (if (called-interactively-p 'any)
+        (message "Cleaned %d stale .elc file%s" cleaned (if (= cleaned 1) "" "s"))
+      cleaned)))
 
 ;;; UI Setup
 
@@ -148,7 +178,7 @@ If ENV-FILE is not provided, uses ~/.emacs.d/.local/env.el"
 ;;; File Utilities
 
 (defun read-file-or-nil (filename)
-  "Read file FILENAME, returning the contents as a string, or nil if it doesn't exist."
+  "Read file FILENAME, returning contents as string, or nil if it doesn't exist."
   (condition-case nil
       (with-temp-buffer
         (insert-file-contents filename)

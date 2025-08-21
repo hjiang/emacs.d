@@ -62,7 +62,7 @@
   :straight (:type built-in)
   :hook
   (before-save . delete-trailing-whitespace)
-  (after-save . auto-compile-init-file)
+  (after-save . auto-compile-emacs-lisp-files)
   :config
   (cleanup-clutter)
   (setq-default line-spacing 0.2
