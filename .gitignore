@@ -1,5 +1,10 @@
+*.elc
 *~
+.DS_Store
+.cache/
 .local/
+.lsp-session*
+.org-id-locations
 auto-save-list/
 eln-cache/
 elpa/
@@ -8,9 +13,11 @@ image-dired/
 local/
 nov-places
 places
+projectile-bookmarks.eld
 projects
 recentf
 straight/
+tramp
 transient/
 tree-sitter/
 url/
